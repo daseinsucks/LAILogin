@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open URL with Token</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 300px; margin: 20px auto; }
+    input, button { width: 100%; margin: 5px 0; padding: 8px; }
+    button:disabled { background-color: #ccc; }
+  </style>
+</head>
+<body>
+
+<h2>Open URL with Token</h2>
+<input id="url" type="text" placeholder="Enter URL" required>
+<input id="port" type="number" placeholder="Enter Port" required>
+<input id="token" type="text" placeholder="Enter Token" required>
+<button id="openButton" disabled>Open URL</button>
+
+<script>
+  const urlInput = document.getElementById('url');
+  const portInput = document.getElementById('port');
+  const tokenInput = document.getElementById('token');
+  const openButton = document.getElementById('openButton');
+
+  function toggleButton() {
+    openButton.disabled = !(
+      urlInput.value &&
+      portInput.value &&
+      tokenInput.value
+    );
+  }
+
+  urlInput.addEventListener('input', toggleButton);
+  portInput.addEventListener('input', toggleButton);
+  tokenInput.addEventListener('input', toggleButton);
+
+  openButton.addEventListener('click', () => {
+    const url = `${urlInput.value}:${portInput.value}`;
+    const token = `Bearer ${tokenInput.value}`;
+
+    sessionStorage.setItem('authToken', token);
+
+    window.open(url, '_blank');
+  });
+</script>
+
+</body>
+</html>
