@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open URL with Token</title>
+  <title>Doorman, let me in the door</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 300px; margin: 20px auto; }
     input, button { width: 100%; margin: 5px 0; padding: 8px; }
@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<h2>Open URL with Token</h2>
+<h2>Doorman, let me in the door</h2>
 <input id="url" type="text" placeholder="Enter URL" required>
 <input id="port" type="number" placeholder="Enter Port" required>
 <input id="token" type="text" placeholder="Enter Token" required>
@@ -41,9 +41,10 @@
   const port = portInput.value;
   const token = tokenInput.value;
 
-
+  // Construct the proxy URL with query parameters
   const proxyUrl = `/api/proxy?url=${encodeURIComponent(ip)}&port=${encodeURIComponent(port)}&token=${encodeURIComponent(token)}`;
 
+  // Open the proxy URL in a new tab (this will redirect to the target URL)
   window.open(proxyUrl, '_blank');
 });
 </script>
