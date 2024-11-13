@@ -1,13 +1,31 @@
-import httpProxy from 'http-proxy';
-
-const proxy = httpProxy.createProxyServer();
+import http from 'http';
+import https from 'https';
 
 export default function handler(req, res) {
-  // Retrieve token and target URL from query parameters
   const { url, port, token } = req.query;
-  const target = `http://${url}:${port}`;
 
-  // Forward the request with the Authorization header
-  req.headers['Authorization'] = `Bearer ${token}`;
-  proxy.web(req, res, { target, changeOrigin: true });
+  const targetUrl = `${url}:${port}`;
+
+  const options = {
+    hostname: url,
+    port: port,
+    path: '/',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  };
+
+  const protocol = port == 443 ? https : http;
+
+  const proxyReq = protocol.request(options, (proxyRes) => {
+    res.writeHead(proxyRes.statusCode, proxyRes.headers);
+    proxyRes.pipe(res, { end: true });
+  });
+
+  proxyReq.on('error', (err) => {
+    res.status(500).json({ error: 'Proxy request failed', details: err.message });
+  });
+
+  req.pipe(proxyReq, { end: true });
 }
