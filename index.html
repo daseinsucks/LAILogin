@@ -37,13 +37,15 @@
   tokenInput.addEventListener('input', toggleButton);
 
   openButton.addEventListener('click', () => {
-    const url = `${urlInput.value}:${portInput.value}`;
-    const token = `Bearer ${tokenInput.value}`;
+  const ip = urlInput.value;
+  const port = portInput.value;
+  const token = tokenInput.value;
 
-    sessionStorage.setItem('authToken', token);
 
-    window.open(url, '_blank');
-  });
+  const proxyUrl = `/api/proxy?url=${encodeURIComponent(ip)}&port=${encodeURIComponent(port)}&token=${encodeURIComponent(token)}`;
+
+  window.open(proxyUrl, '_blank');
+});
 </script>
 
 </body>
