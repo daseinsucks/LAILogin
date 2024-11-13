@@ -36,7 +36,7 @@
   portInput.addEventListener('input', toggleButton);
   tokenInput.addEventListener('input', toggleButton);
 
-  openButton.addEventListener('click', () => {
+  openButton.addEventListener('click', async () => {
   const ip = urlInput.value;
   const port = portInput.value;
   const token = tokenInput.value;
@@ -44,8 +44,21 @@
   // Construct the proxy URL with query parameters
   const proxyUrl = `/api/proxy?url=${encodeURIComponent(ip)}&port=${encodeURIComponent(port)}&token=${encodeURIComponent(token)}`;
 
-  // Open the proxy URL in a new tab (this will redirect to the target URL)
-  window.open(proxyUrl, '_blank');
+  try {
+    // Make a fetch request to the proxy endpoint
+    const response = await fetch(proxyUrl);
+
+    if (response.ok) {
+      // If successful, render the response (e.g., as HTML)
+      const data = await response.text();
+      document.getElementById('result').innerHTML = data;  // Assuming you have a result div
+    } else {
+      // Handle failure
+      console.error('Failed to fetch data:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
 });
 </script>
 
